@@ -5,7 +5,7 @@ const path = require("path");
 const { EventEmitter } = require("events");
 const PORT = 5001;
 
-const newsletter_signup = new EventEmitter();
+const newsletter = new EventEmitter();
 
 const server = createServer((req, res) => {
   const { url, method } = req;
@@ -27,8 +27,8 @@ const server = createServer((req, res) => {
   req.on("end", ()=>{
     if (url === "/newsletter_signup" && method === "POST"){
     const body = JSON.parse(Buffer.concat(chunks).toString());
-    const signUp = `${body.username}, ${body.newsletter}\n`;
-    newsletter_signup.emit("new signup!", signUp, res);
+    const signUp = `${body.contact}, ${body.newsletter}\n`;
+    newsletter.emit("new singup!", signUp, res);
     res.setHeader("content-Type", "application/json");
     res.write(
         JSON.stringify({ msg: "Successfully signed up" })
@@ -51,3 +51,27 @@ const server = createServer((req, res) => {
   })
 });
 server.listen(PORT, ()=> console.log(`server listening at ${PORT} port`))
+
+
+
+newsletter.on(" new movie!", (newMovie, res)=>{
+    appendFile(
+        path(__dirname, "./assets.newsList.csv",
+        singUp,
+        (err)=>{
+            if (err){
+                newsletter.emit('error', err, res);
+                return;
+            }
+            console.log("the file was updated");
+        })
+    )
+})
+
+newsletter.on("error", (err,res)=>{
+    console.log(err);
+    res.statusCode = 500;
+    res.setHeader("content-Type", "application/json");
+    res.write(JSON.stringify({msg: "there was an error in creating new movie"}))
+    res.end();
+})
