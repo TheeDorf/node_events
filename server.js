@@ -28,7 +28,7 @@ const server = createServer((req, res) => {
     if (url === "/newsletter_signup" && method === "POST"){
     const body = JSON.parse(Buffer.concat(chunks).toString());
     const signUp = `${body.contact}, ${body.newsletter}\n`;
-    newsletter.emit("new singup!", signUp, res);
+    newsletter.emit("new signup!", signUp, res);
     res.setHeader("content-Type", "application/json");
     res.write(
         JSON.stringify({ msg: "Successfully signed up" })
@@ -54,10 +54,10 @@ server.listen(PORT, ()=> console.log(`server listening at ${PORT} port`))
 
 
 
-newsletter.on(" new movie!", (newMovie, res)=>{
+newsletter.on(" new signup!", (contact, res)=>{
     appendFile(
         path(__dirname, "./assets.newsList.csv",
-        singUp,
+        contact,
         (err)=>{
             if (err){
                 newsletter.emit('error', err, res);
@@ -72,6 +72,6 @@ newsletter.on("error", (err,res)=>{
     console.log(err);
     res.statusCode = 500;
     res.setHeader("content-Type", "application/json");
-    res.write(JSON.stringify({msg: "there was an error in creating new movie"}))
+    res.write(JSON.stringify({msg: "there was an error "}))
     res.end();
 })
