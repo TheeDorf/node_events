@@ -56,7 +56,7 @@ server.listen(PORT, ()=> console.log(`server listening at ${PORT} port`))
 
 newsletter.on(" new signup!", (contact, res)=>{
     appendFile(
-        path(__dirname, "./assets.newsList.csv",
+        path.join(__dirname, "./assets.newsList.csv",
         contact,
         (err)=>{
             if (err){
