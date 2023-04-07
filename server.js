@@ -52,19 +52,17 @@ const server = createServer((req, res) => {
 });
 server.listen(PORT, ()=> console.log(`server listening at ${PORT} port`))
 
-
-
-newsletter.on(" new signup!", (contact, res)=>{
+newsletter.on("new signup!", (signUp, res)=>{
     appendFile(
-        path.join(__dirname, "./assets.newsList.csv",
-        contact,
+        path.join(__dirname, "./assets/newsList.csv"),
+        signUp,
         (err)=>{
             if (err){
                 newsletter.emit('error', err, res);
                 return;
             }
             console.log("the file was updated");
-        })
+        }
     )
 })
 
